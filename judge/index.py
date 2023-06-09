@@ -4,4 +4,4 @@ class Judge:
 
     @staticmethod
     def main(word: str):
-        return '中' in word
+        return '持续' in word

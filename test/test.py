@@ -1,45 +1,71 @@
-import cv2
-import numpy as np
+import pytesseract
+from PIL import Image
+import math
 
-def apply_scan_effect(image):
-    # 调整图像大小以模拟扫描效果
-    resized = cv2.resize(image, None, fx=0.5, fy=0.5)
-    
-    # 将图像转换为灰度
-    gray = cv2.cvtColor(resized, cv2.COLOR_BGR2GRAY)
-    
-    # 应用高斯模糊以模拟扫描效果
-    blurred = cv2.GaussianBlur(gray, (5, 5), 0)
-    
-    # 使用大津阈值化方法进行二值化
-    _, threshold = cv2.threshold(blurred, 0, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)
-    
-    # 返回扫描效果的图像
-    return threshold
 
-def apply_photograph_effect(image):
-    # 添加高斯噪声
-    noisy_image = np.float32(image) + np.random.randn(*image.shape) * 15
-    
-    # 将图像转换为8位无符号整型
-    noisy_image = np.uint8(np.clip(noisy_image, 0, 255))
-    
-    # 应用高斯模糊
-    blurred_image = cv2.GaussianBlur(noisy_image, (15, 15), 0)
-    
-    # 返回拍照后的效果图像
-    return blurred_image
+def is_chinese(char):
+    if '\u4e00' <= char <= '\u9fff':
+        return True
+    else:
+        return False
 
-# 读取输入图像
-input_image = cv2.imread('2.jpg')
 
-# 应用扫描效果
-# output_image = apply_photograph_effect(input_image)
+# 打开图像文件
+image = Image.open('1.jpg')
 
-# 显示原始图像和处理后的图像
-# cv2.imshow('Original Image', input_image)
-# cv2.imshow('Scan Effect', output_image)
-# cv2.waitKey(0)
-# cv2.destroyAllWindows()
+# 使用Tesseract进行OCR
+# text = pytesseract.image_to_string(
+#     image, lang='chi_sim', config='--tessdata-dir "/home/hc/pic/tessdata"')
+# print(text)
 
-cv2.imwrite('tmp.jpg',input_image )
+
+result = pytesseract.image_to_data(image, output_type=pytesseract.Output.DICT,
+                                   lang='chi_sim', config='--tessdata-dir "/home/hc/pic/tessdata" ')
+# 提取每个单词的位置信息
+word_boxes = []
+words = []
+for i, word in enumerate(result['text']):
+    if word.strip() != '':
+        left = result['left'][i]
+        top = result['top'][i]
+        width = result['width'][i]
+        height = result['height'][i]
+
+        # 存储单词的位置信息
+        word_box = (left, top, left + width, top + height)
+        word_boxes.append(word_box)
+        words.append(word)
+
+# 根据单词的位置信息，合并相邻的单词形成句子的位置信息
+sentence_boxes = []
+sentences = []
+
+current_sentence = ''
+current_sentence_box = (0, 0, 0, 0)
+for word, word_box in zip(words, word_boxes):
+    if len(current_sentence) == 0:
+        current_sentence = word
+        current_sentence_box = word_box
+    else:
+        # 判断当前单词是否与前一个单词在同一行
+        if not is_chinese(word) or abs(word_box[1] - current_sentence_box[1]) < current_sentence_box[3]-current_sentence_box[1]:
+            current_sentence += word
+            current_sentence_box = (min(current_sentence_box[0], word_box[0]),
+                                    min(current_sentence_box[1], word_box[1]),
+                                    max(current_sentence_box[2], word_box[2]),
+                                    max(current_sentence_box[3], word_box[3]))
+        else:
+            sentence_boxes.append(current_sentence_box)
+            sentences.append(current_sentence)
+
+            current_sentence = word
+            current_sentence_box = word_box
+
+# 存储最后一个句子的位置信息
+if len(current_sentence) > 0:
+    sentence_boxes.append(current_sentence_box)
+    sentences.append(current_sentence)
+
+# 打印每句话的位置信息
+for sentence, sentence_box in zip(sentences, sentence_boxes):
+    print(f'{sentence} Position: {sentence_box}')
