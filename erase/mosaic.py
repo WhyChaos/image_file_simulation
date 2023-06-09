@@ -1,6 +1,6 @@
 def _mosaic(img):
     s = img.size
-    img = img.resize((10, 10))
+    img = img.resize((int(s[0]/10)+1, int(s[1]/10)+1))
     img = img.resize(s)
     return img
 
