@@ -9,12 +9,16 @@ from effects.index import Effect
 import os
 import glob
 
+orc = OCR.by_row
+
 
 def main():
     for infile in glob.glob("./input/*.jpg"):
+        infile = os.path.abspath(infile)
         file, ext = os.path.splitext(infile)
         with Image.open(infile) as img:
-            coordinate_word_list = OCR.by_row(infile)
+            coordinate_word_list = orc(infile)
+            print(infile)
             print(coordinate_word_list)
 
             coordinate_list = []
