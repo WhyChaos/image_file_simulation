@@ -1,7 +1,7 @@
 
 from PIL import Image
 
-from ocr.tesseract import OCR
+from ocr.ALi import OCR
 from erase.index import erase
 from judge.index import Judge
 from effects.index import Effect
@@ -10,7 +10,7 @@ from pdf_to_image.index import pdf_to_image
 import os
 import glob
 
-orc = OCR.by_row
+orc = OCR.main
 
 
 def main():
