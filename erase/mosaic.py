@@ -6,7 +6,7 @@ def _mosaic(img):
 
 
 def mosaic(img, coordinate):
-    x1, y1, x2, y2 = coordinate
+    x1, y1, x2, y2 = map(int, coordinate)
     c = img.crop((x1, y1, x2, y2))
     c = _mosaic(c)
     img.paste(c, (x1, y1, x2, y2))

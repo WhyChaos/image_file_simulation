@@ -1,7 +1,7 @@
 
 from PIL import Image
 
-from ocr.tesseract import OCR
+from ocr.paddleocr import OCR
 from erase.index import erase
 from judge.index import Judge
 from effects.index import Effect
@@ -9,7 +9,7 @@ from effects.index import Effect
 import os
 import glob
 
-orc = OCR.by_row
+orc = OCR.main
 
 
 def main():
@@ -24,6 +24,7 @@ def main():
             coordinate_list = []
             for coordinate_word in coordinate_word_list:
                 if (Judge.main(coordinate_word['word'])):
+                    print(coordinate_word['word'])
                     coordinate_list.append(coordinate_word['coordinate'])
 
             img = erase(img=img, coordinate_list=coordinate_list)

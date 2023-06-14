@@ -1,7 +1,7 @@
 
 from PIL import Image
 
-from ocr.ALi import OCR
+from ocr.paddleocr import OCR
 from erase.index import erase
 from judge.index import Judge
 from effects.index import Effect
