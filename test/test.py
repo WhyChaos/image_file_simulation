@@ -1,34 +1,25 @@
+import cv2
 import numpy as np
-from PIL import Image, ImageDraw
-import math
+
+# 读取原始文档图片
+image = cv2.imread('3.jpg')
+
+# 定义原始文档的四个角点
+original_corners = np.float32([[0, 0], [image.shape[1], 0], [
+                              image.shape[1], image.shape[0]], [0, image.shape[0]]])
+
+# 定义目标文档的四个角点（模拟拍照的角度）
+# 调整下面的坐标值来改变角度
+target_corners = np.float32([[100, 100], [image.shape[1]-10, 200],
+                            [image.shape[1]-20, image.shape[0]-10], [200, image.shape[0]-20]])
+
+# 计算透视变换矩阵
+perspective_matrix = cv2.getPerspectiveTransform(
+    original_corners, target_corners)
+
+# 进行透视变换
+result = cv2.warpPerspective(
+    image, perspective_matrix, (image.shape[1], image.shape[0]), borderMode=cv2.BORDER_CONSTANT, borderValue=(255, 255, 255))
 
 
-def apply_curve(image_path):
-
-    image = Image.open(image_path)
-    width = image.width
-    height = image.height
-
-    curve_x = np.linspace(1, 5, width)
-    curve_y = np.sin(curve_x) / curve_x * height / 50
-
-    print(curve_x[:10])
-    print(curve_y[:10])
-
-    new_image = Image.new("RGB", image.size)
-    draw = ImageDraw.Draw(new_image)
-
-    for i, x in enumerate(range(width)):
-        for y in range(height):
-            offset_y = math.ceil(curve_y[i]) + y
-            if offset_y >= 0 and offset_y < height:
-                pixel = image.getpixel((x, offset_y))
-            else:
-                pixel = (255, 255, 255)
-            draw.point((x, y), pixel)
-
-    new_image.save('tmp.jpg', 'JPEG')
-
-
-image_path = '3.jpg'
-apply_curve(image_path)
+cv2.imwrite('output.jpg', result)

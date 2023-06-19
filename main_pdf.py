@@ -11,6 +11,7 @@ import os
 import glob
 
 orc = OCR.main
+judge = Judge('./judge/keyword.dic')
 
 
 def main():
@@ -36,7 +37,7 @@ def main():
 
             coordinate_list = []
             for coordinate_word in coordinate_word_list:
-                if (Judge.main(coordinate_word['word'])):
+                if (judge.main(coordinate_word['word'])):
                     coordinate_list.append(coordinate_word['coordinate'])
 
             image = erase(img=image, coordinate_list=coordinate_list)

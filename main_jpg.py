@@ -10,6 +10,8 @@ import os
 import glob
 
 orc = OCR.main
+judge = Judge('./judge/keyword.dic')
+effect = Effect(type='photo')
 
 
 def main():
@@ -23,13 +25,13 @@ def main():
 
             coordinate_list = []
             for coordinate_word in coordinate_word_list:
-                if (Judge.main(coordinate_word['word'])):
+                if (judge.main(coordinate_word['word'])):
                     print(coordinate_word['word'])
                     coordinate_list.append(coordinate_word['coordinate'])
 
             img = erase(img=img, coordinate_list=coordinate_list)
 
-            img = Effect.apply_scan_effect(img)
+            img = effect.main(img)
 
             img.save('./output/' + file.split('/')[-1] + ".jpg", "JPEG")
 
