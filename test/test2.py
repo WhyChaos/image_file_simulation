@@ -15,7 +15,7 @@ def replace_background(image_path, background_path, output_path):
     pts1 = np.float32([[0, 0], [image.shape[1], 0], [
         image.shape[1], image.shape[0]], [0, image.shape[0]]])
     # 定义目标图像的四个点
-    pts2 = np.float32([[100, 100], [background.shape[1], 0],
+    pts2 = np.float32([[0, 100], [background.shape[1], 0],
                        [background.shape[1]-100, background.shape[0]-10], [0, background.shape[0]]])
 
     # 计算透视变换矩阵

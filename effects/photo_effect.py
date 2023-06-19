@@ -6,7 +6,21 @@ from PIL import Image
 
 class PhotoEffect:
     def __init__(self):
-        self.background_path = 'effects/background/background.jpg'
+        self.coordinate = [
+            {
+                'filename': 'background1.jpg',
+                'coordinate': [[139, 167], [1033, 65], [1183, 1493], [136, 1474]]
+            },
+            {
+                'filename': 'background2.jpg',
+                'coordinate': [[306, 133], [1099, 214], [1300, 1384], [283, 1471]]
+            },
+            {
+                'filename': 'background3.jpg',
+                'coordinate': [[163, 127], [979, 173], [1197, 1358], [153, 1456]]
+            }
+        ]
+        self.background_path = 'effects/background/'
 
     def main(self, image):
         # 将Pillow的Image对象转换为NumPy数组
@@ -21,14 +35,14 @@ class PhotoEffect:
         height, width, _ = image.shape
 
         # 加载背景图像
-        background = cv2.imread(self.background_path)
+        background = cv2.imread(self.background_path +
+                                self.coordinate[2]['filename'])
 
         # 定义透视变换的四个点
         pts1 = np.float32([[0, 0], [image.shape[1], 0], [
             image.shape[1], image.shape[0]], [0, image.shape[0]]])
         # 定义目标图像的四个点
-        pts2 = np.float32([[100, 100], [background.shape[1], 0],
-                           [background.shape[1]-100, background.shape[0]-10], [0, background.shape[0]]])
+        pts2 = np.float32(self.coordinate[2]['coordinate'])
 
         # 计算透视变换矩阵
         M = cv2.getPerspectiveTransform(pts1, pts2)

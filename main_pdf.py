@@ -12,6 +12,7 @@ import glob
 
 orc = OCR.main
 judge = Judge('./judge/keyword.dic')
+effect = Effect(type='photo')
 
 
 def main():
@@ -42,7 +43,7 @@ def main():
 
             image = erase(img=image, coordinate_list=coordinate_list)
 
-            image = Effect.apply_scan_effect(image)
+            image = effect.main(image)
 
             image.save(output_file, "JPEG")
 
