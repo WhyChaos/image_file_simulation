@@ -14,7 +14,7 @@ orc = OCR.main
 judge = Judge('./judge/keyword.dic')
 effect = Effect(type='scan')
 
-# 显示将pdf转换为图像，后面过程同main_jpg
+# 先将pdf转换为图像，后面过程同main_jpg
 
 
 def main():

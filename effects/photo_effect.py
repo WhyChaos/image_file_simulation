@@ -11,7 +11,7 @@ class PhotoEffect:
         self.coordinate = [
             {
                 'filename': 'background1.jpg',
-                'coordinate': [[139, 167], [1033, 65], [1183, 1493], [136, 1474]]
+                'coordinate': [[122, 122], [651, 134], [815, 926], [-30, 918]]
             },
             {
                 'filename': 'background2.jpg',
@@ -31,15 +31,15 @@ class PhotoEffect:
             },
             {
                 'filename': 'background6.jpg',
-                'coordinate': [[202, 198], [1088, 201], [1069, 1413], [248, 1414]]
+                'coordinate': [[129, 467], [398, -15], [1169, 355], [832, 897]]
             },
             {
                 'filename': 'background7.jpg',
-                'coordinate': [[92, 255], [947, 88], [1053, 1597], [80, 1489]]
+                'coordinate': [[105, 381], [117, 94], [536, 100], [538, 392]]
             },
             {
                 'filename': 'background8.jpg',
-                'coordinate': [[100, 272], [893, 181], [989, 1461], [75, 1449]]
+                'coordinate': [[114, 487], [107, 104], [663, 92], [677, 481]]
             }
         ]
         self.background_path = 'effects/background/'
@@ -51,8 +51,6 @@ class PhotoEffect:
         # bgr_image_array = cv2.cvtColor(image_array, cv2.COLOR_RGB2BGR)
         # 将NumPy数组转换为OpenCV的图像对象
         image = cv2.cvtColor(image_array, cv2.COLOR_BGR2RGB)
-
-        cv2.imwrite('x.jpg', image)
 
         height, width, _ = image.shape
 
@@ -78,12 +76,9 @@ class PhotoEffect:
         # 将背景图像与透视变换后的图像相结合
         result = cv2.bitwise_and(background, transformed_image)
 
-        cv2.imwrite('y.jpg', result)
-
         # 将OpenCV图像对象转换为RGB模式
         rgb_image = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
         # 创建Pillow的Image对象
         result = Image.fromarray(rgb_image)
 
-        result.save("z.jpg", "JPEG")
         return result
