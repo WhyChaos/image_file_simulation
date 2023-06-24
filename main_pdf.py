@@ -12,7 +12,9 @@ import glob
 
 orc = OCR.main
 judge = Judge('./judge/keyword.dic')
-effect = Effect(type='photo')
+effect = Effect(type='scan')
+
+# 显示将pdf转换为图像，后面过程同main_jpg
 
 
 def main():
@@ -41,7 +43,8 @@ def main():
                 if (judge.main(coordinate_word['word'])):
                     coordinate_list.append(coordinate_word['coordinate'])
 
-            image = erase(img=image, coordinate_list=coordinate_list)
+            img = erase(img=image, coordinate_list=coordinate_list)
+            # image = erase(img=image, coordinate_list=coordinate_list, type='dark')
 
             image = effect.main(image)
 

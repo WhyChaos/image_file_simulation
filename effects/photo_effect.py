@@ -2,10 +2,12 @@
 import cv2
 import numpy as np
 from PIL import Image
+import random
 
 
 class PhotoEffect:
     def __init__(self):
+        # 背景图，四个坐标：左上，右上，右下，左下
         self.coordinate = [
             {
                 'filename': 'background1.jpg',
@@ -18,6 +20,26 @@ class PhotoEffect:
             {
                 'filename': 'background3.jpg',
                 'coordinate': [[163, 127], [979, 173], [1197, 1358], [153, 1456]]
+            },
+            {
+                'filename': 'background4.jpg',
+                'coordinate': [[291, 171], [1078, 258], [1120, 1376], [259, 1419]]
+            },
+            {
+                'filename': 'background5.jpg',
+                'coordinate': [[224, 149], [970, 122], [1174, 1219], [147, 1272]]
+            },
+            {
+                'filename': 'background6.jpg',
+                'coordinate': [[202, 198], [1088, 201], [1069, 1413], [248, 1414]]
+            },
+            {
+                'filename': 'background7.jpg',
+                'coordinate': [[92, 255], [947, 88], [1053, 1597], [80, 1489]]
+            },
+            {
+                'filename': 'background8.jpg',
+                'coordinate': [[100, 272], [893, 181], [989, 1461], [75, 1449]]
             }
         ]
         self.background_path = 'effects/background/'
@@ -34,15 +56,17 @@ class PhotoEffect:
 
         height, width, _ = image.shape
 
+        background_index = random.randint(0, len(self.coordinate)-1)
+
         # 加载背景图像
         background = cv2.imread(self.background_path +
-                                self.coordinate[2]['filename'])
+                                self.coordinate[background_index]['filename'])
 
         # 定义透视变换的四个点
         pts1 = np.float32([[0, 0], [image.shape[1], 0], [
             image.shape[1], image.shape[0]], [0, image.shape[0]]])
         # 定义目标图像的四个点
-        pts2 = np.float32(self.coordinate[2]['coordinate'])
+        pts2 = np.float32(self.coordinate[background_index]['coordinate'])
 
         # 计算透视变换矩阵
         M = cv2.getPerspectiveTransform(pts1, pts2)

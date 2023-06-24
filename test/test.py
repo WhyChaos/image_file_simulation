@@ -1,25 +1,26 @@
+import paddleocr
+from paddleocr import PaddleOCR, draw_ocr
 import cv2
 import numpy as np
 
-# 读取原始文档图片
-image = cv2.imread('3.jpg')
+ocr = PaddleOCR(use_angle_cls=True, lang="ch")
+image_path = '3.jpg'  # 替换为你的图像路径
+image = cv2.imread(image_path)  # 使用OpenCV加载图像
+result = ocr.ocr(image, cls=True)  # 进行OCR识别
+for line in result:
+    print(line)
+    print('======')
+    for word in line:
+        text = word[1][0]  # 获取识别文本
 
-# 定义原始文档的四个角点
-original_corners = np.float32([[0, 0], [image.shape[1], 0], [
-                              image.shape[1], image.shape[0]], [0, image.shape[0]]])
+        print(text)
+        print('-----')
+        if "中国" in text:  # 替换 "关键字" 为你要打码的具体关键字
+            print('包含中国')
+            bbox = word[0]  # 获取关键字所在的坐标信息
+            xmin, ymin, xmax, ymax = bbox
+            image = cv2.rectangle(
+                image, (xmin, ymin), (xmax, ymax), (0, 0, 0), -1)  # 在图像上绘制黑色矩形框进行打码
 
-# 定义目标文档的四个角点（模拟拍照的角度）
-# 调整下面的坐标值来改变角度
-target_corners = np.float32([[100, 100], [image.shape[1]-10, 200],
-                            [image.shape[1]-20, image.shape[0]-10], [200, image.shape[0]-20]])
-
-# 计算透视变换矩阵
-perspective_matrix = cv2.getPerspectiveTransform(
-    original_corners, target_corners)
-
-# 进行透视变换
-result = cv2.warpPerspective(
-    image, perspective_matrix, (image.shape[1], image.shape[0]), borderMode=cv2.BORDER_CONSTANT, borderValue=(255, 255, 255))
-
-
-cv2.imwrite('output.jpg', result)
+# 或者保存结果图像
+cv2.imwrite("result.jpg", image)
