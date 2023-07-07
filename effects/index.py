@@ -5,6 +5,7 @@ import numpy as np
 import math
 from effects.scan_effect import ScanEffect
 from effects.photo_effect import PhotoEffect
+from effects.photo_screen_effect import PhotoScreenEffect
 
 
 class Effect:
@@ -13,6 +14,8 @@ class Effect:
             self.effect = ScanEffect()
         elif type == 'photo':
             self.effect = PhotoEffect()
+        elif type == 'photo_screen':
+            self.effect = PhotoScreenEffect()
 
     def main(self, image):
         return self.effect.main(image)
