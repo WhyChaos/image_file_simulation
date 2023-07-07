@@ -12,7 +12,7 @@ import glob
 
 orc = OCR.main
 judge = Judge('./judge/keyword.dic')
-effect = Effect(type='photo')
+effect = Effect(type='photo_screen')
 
 # 先将pdf转换为图像，后面过程同main_jpg
 

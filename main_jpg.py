@@ -13,8 +13,8 @@ import glob
 orc = OCR.main
 # 关键字判断
 judge = Judge('./judge/keyword.dic')
-# 定义特效，扫描或拍照 type='photo'|type='scan'|type='photo_screen'
-effect = Effect(type='photo_screen')
+# 定义特效，扫描或拍照 type='photo'|type='scan'|type='photo_screen'|type='screen'
+effect = Effect(type='screen')
 
 
 def main():
