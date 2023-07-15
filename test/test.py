@@ -1,19 +1,21 @@
-from PIL import Image, ImageDraw
-import cv2
+from PIL import ImageEnhance, Image
 
+# 打开图像
+image = Image.open("1.jpg")
 
-def add_moire_pattern(image_path, scale=20):
-    # 打开图像
-    image = cv2.imread(image_path)
-    height, width, _ = image.shape
+# 创建对比度增强器
+contrast_enhancer = ImageEnhance.Contrast(image)
 
-    moier = cv2.imread('moier3.jpg')
-    moier = cv2.resize(moier, (width, height))
+# 增强对比度，参数大于1增强对比度，小于1降低对比度
+contrast_factor = 1.5
+image = contrast_enhancer.enhance(contrast_factor)
 
-    result = cv2.bitwise_and(image, moier)
+# 创建亮度增强器
+brightness_enhancer = ImageEnhance.Brightness(image)
 
-    cv2.imwrite('result.jpg', result)
+# 增强亮度，参数大于1增强亮度，小于1降低亮度
+brightness_factor = 1.2
+image = brightness_enhancer.enhance(brightness_factor)
 
-
-# 使用示例
-add_moire_pattern('3.jpg')
+# 保存修改后的图像
+image.save("modified_image.jpg")
