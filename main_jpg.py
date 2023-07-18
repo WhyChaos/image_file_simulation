@@ -12,7 +12,7 @@ import glob
 # ocr，使用paddleocr
 orc = OCR.main
 # 关键字判断
-judge = Judge('./judge/keyword.dic')
+judge = Judge(keyword_path='./judge/keyword.dic', by_row=False)
 # 定义特效，扫描或拍照 type='photo'|type='scan'|type='photo_screen'|type='screen'
 effect = Effect(type='screen')
 
@@ -28,12 +28,14 @@ def main():
             print(infile)
             print(coordinate_word_list)
 
-            coordinate_list = []
-            for coordinate_word in coordinate_word_list:
-                # 判断是否为关键字
-                if (judge.main(coordinate_word['word'])):
-                    print(coordinate_word['word'])
-                    coordinate_list.append(coordinate_word['coordinate'])
+            # coordinate_list = []
+            # for coordinate_word in coordinate_word_list:
+            #     # 判断是否为关键字
+            #     if (judge.main(coordinate_word['word'])):
+            #         print(coordinate_word['word'])
+            #         coordinate_list.append(coordinate_word['coordinate'])
+
+            coordinate_list = judge.main(coordinate_word_list)
 
             # 抹去关键字信息，马赛克或全黑效果 type='dark'|type='mosaic'
             img = erase(img=img, coordinate_list=coordinate_list)
